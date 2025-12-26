@@ -1,0 +1,193 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
+struct Employee { 
+char SSN[20]; 
+char Name[50]; 
+char Dept[50]; 
+char Desig[50]; 
+float Sal; 
+char PhNo[15]; 
+}; 
+typedef struct Node { 
+struct Employee emp; 
+struct Node *prev, *next; 
+} Node; 
+Node *head = NULL; 
+// Function to create a new node 
+Node* createNode() { 
+Node *newnode = (Node *)malloc(sizeof(Node)); 
+if (!newnode) { 
+printf("Memory allocation failed\n"); 
+exit(0); 
+} 
+printf("\nEnter Employee Details:\n"); 
+printf("SSN: "); scanf("%s", newnode->emp.SSN); 
+printf("Name: "); scanf("%s", newnode->emp.Name); 
+printf("Department: "); scanf("%s", newnode->emp.Dept); 
+printf("Designation: "); scanf("%s", newnode->emp.Desig); 
+printf("Salary: "); scanf("%f", &newnode->emp.Sal); 
+printf("Phone No: "); scanf("%s", newnode->emp.PhNo); 
+newnode->prev = newnode->next = NULL; 
+return newnode; 
+} 
+void createDLL(int n) { 
+for (int i = 0; i < n; i++) { 
+Node *newnode = createNode(); 
+if (head == NULL) { 
+head = newnode; 
+} else { 
+Node *temp = head; 
+while (temp->next != NULL) 
+temp = temp->next; 
+temp->next = newnode; 
+newnode->prev = temp; 
+} 
+} 
+} 
+ 
+void displayDLL() { 
+    if (head == NULL) { 
+        printf("\nDLL is Empty\n"); 
+        return; 
+    } 
+ 
+    Node *temp = head; 
+    int count = 0; 
+ 
+    printf("\nEmployee DLL:\n"); 
+    while (temp != NULL) { 
+        printf("SSN: %s | Name: %s | Dept: %s | Designation: %s | Salary: %.2f | Phone: %s\n", 
+               temp->emp.SSN, temp->emp.Name, temp->emp.Dept, 
+               temp->emp.Desig, temp->emp.Sal, temp->emp.PhNo); 
+ 
+        temp = temp->next; 
+        count++; 
+    } 
+ 
+    printf("\nTotal Employees = %d\n", count); 
+} 
+ 
+void insertEnd() { 
+    Node *newnode = createNode(); 
+ 
+    if (head == NULL) { 
+        head = newnode; 
+    } else { 
+        Node *temp = head; 
+        while (temp->next != NULL) 
+            temp = temp->next; 
+ 
+        temp->next = newnode; 
+        newnode->prev = temp; 
+    } 
+} 
+ 
+void deleteEnd() { 
+    if (head == NULL) { 
+        printf("\nDLL is empty\n"); 
+        return; 
+    } 
+ 
+    Node *temp = head; 
+ 
+    if (temp->next == NULL) { 
+        head = NULL; 
+        free(temp); 
+        return; 
+    } 
+ 
+    while (temp->next != NULL) 
+        temp = temp->next; 
+ 
+    temp->prev->next = NULL; 
+    free(temp); 
+} 
+ 
+void insertFront() { 
+    Node *newnode = createNode(); 
+ 
+    if (head == NULL) { 
+        head = newnode; 
+        return; 
+    } 
+ 
+    newnode->next = head; 
+    head->prev = newnode; 
+    head = newnode; 
+} 
+ 
+void deleteFront() { 
+    if (head == NULL) { 
+        printf("\nDLL is empty\n"); 
+        return; 
+    } 
+ 
+    Node *temp = head; 
+ 
+    if (head->next == NULL) { 
+        head = NULL; 
+        free(temp); 
+        return; 
+    } 
+ 
+    head = head->next; 
+    head->prev = NULL; 
+    free(temp); 
+} 
+ 
+void doubleEndedQueueDemo() { 
+    printf("\nDLL can act as Double Ended Queue:\n"); 
+    printf("Front Insertion - insertFront()\n"); 
+    printf("Front Deletion - deleteFront()\n"); 
+    printf("Rear Insertion - insertEnd()\n"); 
+    printf("Rear Deletion - deleteEnd()\n"); 
+} 
+ 
+int main() { 
+    int choice, n; 
+ 
+    while (1) { 
+        printf("\n----- MENU -----\n"); 
+        printf("1. Create DLL with N Employees\n"); 
+printf("2. Display DLL and Count Nodes\n"); 
+printf("3. Insert at End\n"); 
+printf("4. Delete at End\n"); 
+printf("5. Insert at Front\n"); 
+printf("6. Delete at Front\n"); 
+printf("7. Demonstrate DLL as Double Ended Queue\n"); 
+printf("8. Exit\n"); 
+printf("\nEnter choice: "); 
+scanf("%d", &choice); 
+switch (choice) { 
+case 1: 
+printf("Enter number of employees: "); 
+scanf("%d", &n); 
+createDLL(n); 
+break; 
+case 2: 
+displayDLL(); 
+break; 
+case 3: 
+insertEnd(); 
+break; 
+case 4: 
+deleteEnd(); 
+break; 
+case 5: 
+insertFront(); 
+break; 
+case 6: 
+deleteFront(); 
+break; 
+case 7: 
+doubleEndedQueueDemo(); 
+break; 
+case 8: 
+exit(0); 
+default: 
+printf("Invalid Choice!\n"); 
+} 
+} 
+return 0; 
+} 
